@@ -1,42 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Угадайка</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" href="style.css" type="text/css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">    
 </head>
 <body>
-<div class="container">
-    <div class="row game-card align-items-center">
-        <div class="col col-md-4 offset-md-4">
-            <div class="card text-center">
-                <div class="card-header">
-                    <p class="m-0">Вопрос №<span id="orderNumberField">5</span></p>
+
+        <div class="col-md-5 position-absolute top-50 start-50 translate-middle">
+            <div class="card text-center align-items-center" id="allContent">
+                <div id="greeting"class="top-cover my-auto">
+                    <h3>Доброго времени суток Человек!</h3><br>
+                    <p>Я программа которая сможет найти загаданное тобой число.</p>
+                    <p>Правила:</p>
+                    <p>1. Выбрать диапазон в котором будем искать загаданное число <br>(от 1 до 200)</p>
+                    <p>2. Загадать число</p>
+                    <p>3. Отвечать на наводящие вопросы</p>
+                    <button class="btn" onclick="runToMinMaxValue();" id="confirmationRules">Я всё понял! Начнём!</button>
                 </div>
-                <div class="card-body">
-                    <div class="row no-gutters">
-                        <div class="col">
-                            <h3 class="card-title m-0"><span id="answerField">Вы загадали число 5?</span></h3>
-                        </div>
+                <div id="minMaxValue" class="top-cover my-auto">
+                    <p>Введите диапазон в котором будет находится загаданное число (начало и конец диапазона не может быть 0)</p>
+                    <div class="form-outline">
+                        <label class="form-label" for="typeNumber">Мы будем искать <br>от:</label>
+                        <input type="number" id="minValue" value="1" class="form-control text-center mx-auto" />
                     </div>
+                    <div class="form-outline">
+                        <label class="form-label" for="typeNumber">до:</label>
+                        <input type="number" id="maxValue" value="200" class="form-control text-center mx-auto" />  
+                    </div>
+                    <div id="liveAlertPlaceholder"></div>
+                    <button type="button" class="btn" id="liveAlertBtn" onclick="validateForm()">Параметры введены, готов начать поиск!</button>
+                    <!-- <button class="btn btn-info" id="btnLess" onclick="validateForm()">Параметры введены, готов начать поиск!</button> -->
                 </div>
-                <div class="card-body">
+                <div id="questionsToAnswer" class="my-auto">
+                    <h3 class="card-title my-auto"><span id="answerField1"></span></h3>
+                    <button class="btn" id="btnRun" onclick="runGame();">Ну попробуй!</button>
+                </div>
+                <div id="cardHeader">
+                    <p >Вопрос №<span id="orderNumberField">5</span></p>
+                </div>
+                <div class="card text-center align-items-center justify-content-center my-auto" id="cardBody1">
+                    <h3 class="my-auto"><span id="answerField"></span></h3>
+                </div>
+                <div class="card-body my-auto" id="cardBody2">
                     <div class="btn-group">
-                        <button class="btn btn-info" id="btnLess">&#129047;<br>меньше</button>
-                        <button class="btn btn-success btn-lg" id="btnEqual">Верно!</button>
-                        <button class="btn btn-info" id="btnOver">больше<br>&#129045;</button>
+                        <button class="btn" id="btnLess">&#129047;<br>Меньше</button>
+                        <button class="btn" id="btnEqual">Верно!</button>
+                        <button class="btn" id="btnOver">Больше<br>&#129045;</button>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <button class="btn btn-link" id="btnRetry">Заново</button>
+                <div class="card-footer my-auto">
+                    <button class="btn" id="btnRetry" onclick="retry();">Заново</button>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 <script src="script.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>

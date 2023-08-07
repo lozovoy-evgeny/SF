@@ -1,4 +1,39 @@
+body {
+    background-color: rgb(128, 0, 128);
+    font-family:'Pacifico';
+}
+
+#liveAlertBtn, #btnRun, #confirmationRules, #btnLess, #btnEqual, #btnOver, #btnRetry{
+    background-color: rgb(128, 0, 128);
+    color: aliceblue;
+}
+
 .game-card {
     height: 100vh;
     font-family: 'Open Sans', monospace;
+}
+
+.card-body, .card-footer, .card-header, #minMaxValue, #checkValue, #questionsToAnswer, #cardBody1, #cardHeader{
+    display: none;
+}
+
+.card {
+    height: 500px;
+    width: 500px;
+}
+
+#liveAlertBtn, #btnRun {
+    margin: 30px;
+}
+
+#minValue , #maxValue {
+    width: 150px;
+}
+
+#answerField {
+    margin-top: 80px;
+}
+
+#cardHeader{
+    width: 150px;
 }
