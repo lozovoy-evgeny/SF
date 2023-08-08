@@ -50,11 +50,35 @@ let gameRun = true;
 let orderNumber = 1;
 let answerNumberLetters;
 let answerNumber;
+let flag = 1;
 
 var alertPlaceholder = document.getElementById('liveAlertPlaceholder');
 var alertTrigger = document.getElementById('liveAlertBtn');
 const orderNumberField = document.getElementById('orderNumberField');
 const answerField = document.getElementById('answerField');
+
+function viewAction() {
+    if (flag === 1) {
+        runGame();
+        flag = 2;
+    } else {
+        answerNumber  = Math.floor((maxValue - Math.abs(minValue)) / 2);
+
+        document.querySelector('#questionsToAnswer').style.display = 'none';
+        document.querySelector('#orderNumberField').style.display = 'block';
+        document.querySelector('#cardHeader').style.display = 'block';
+        document.querySelector('#cardBody1').style.display = 'block';
+        document.querySelector('#cardBody2').style.display = 'block';
+        document.querySelector('#answerField').style.display = 'block';
+        document.querySelector('.card-footer').style.display = 'block';
+    
+        orderNumberField.innerText = orderNumber;
+    
+        translationRange(answerNumber);   
+    
+        answerField.innerText = `Вы загадали число ${answerNumberLetters}?`;
+    }
+}
 
 function retry() {
     document.querySelector('#orderNumberField').style.display = 'none';
@@ -64,6 +88,7 @@ function retry() {
     document.querySelector('#answerField').style.display = 'none';
     document.querySelector('.card-footer').style.display = 'none';
     runToMinMaxValue();
+    orderNumber = 1;
 }
 
 function translatingNumbers (value) {
@@ -75,25 +100,34 @@ function translatingNumbers (value) {
     let returnValue1 = "";
     let returnValue2 = "";
     let returnValue3 = "";
+    let minus = "";
+    let answerNumberReversed;
 
     var obStr=new String(value);
 
     let numReversed = obStr.split("");
 
+    if (numReversed[0] == '-') {
+        numReversed.shift();
+        minus = "минус";
+    }
+    
+    answerNumberReversed = Math.abs(answerNumber);
+
     console.log(numReversed);
-    if ((answerNumber < 10)&&(answerNumber > 0))  {
+    if ((answerNumberReversed < 10)&&(answerNumberReversed > 0))  {
         for (i=0; i < thirdPlace.length; i++) {
             if (numReversed[0] == (i+1)) {
                 returnValue1 = thirdPlace[i];
             }
         }
-    } else if ((answerNumber > 10)&&(answerNumber < 20)) {
+    } else if ((answerNumberReversed > 10)&&(answerNumberReversed < 20)) {
         for (i=0; i < invalidNumber.length; i++) {
             if (numReversed[1] == (i+1)) {
                 returnValue1 = invalidNumber[i];
             }
         }
-    } else if ((answerNumber >= 10)&&(answerNumber < 100)) {
+    } else if ((answerNumberReversed >= 10)&&(answerNumberReversed < 100)) {
         for (i=0; i < secondPlace.length; i++) {
             if (numReversed[0] == (i+1)) {
                 returnValue2 = secondPlace[i];
@@ -104,7 +138,7 @@ function translatingNumbers (value) {
                 returnValue1 = thirdPlace[i];
             }
         }
-    } else if ((answerNumber > 110)&&(answerNumber < 120)) {
+    } else if ((answerNumberReversed > 110)&&(answerNumberReversed < 120)) {
         for (i=0; i < firstPlace.length; i++) {
             if (numReversed[0] == (i+1)) {
                 returnValue3 = firstPlace[i];
@@ -115,7 +149,7 @@ function translatingNumbers (value) {
                 returnValue1 = invalidNumber[i];
             }
         }
-    } else if ((answerNumber >= 100)&&(answerNumber <= 200)) {
+    } else if ((answerNumberReversed >= 100)&&(answerNumberReversed <= 200)) {
         for (i=0; i < firstPlace.length; i++) {
             if (numReversed[0] == (i+1)) {
                 returnValue3 = firstPlace[i];
@@ -133,16 +167,15 @@ function translatingNumbers (value) {
         }
     }
     
-    returnValue = `${returnValue3} ${returnValue2} ${returnValue1}`;
+    returnValue = `${minus} ${returnValue3} ${returnValue2} ${returnValue1}`;
     console.log(returnValue);
     return returnValue;
-
-
 }
 
 function runGame() {
 
-    answerNumber  = Math.floor((maxValue - minValue) / 2);
+    answerNumber  = Math.floor((maxValue - Math.abs(minValue)) / 2);
+    console.log(answerNumber);
     let messagesVictory = [`Я всегда угадываю\n\u{1F60E}` , `У меня просто кибермозг\n\u{1F92F}`, `Машины рулят!!!\n\u{1F914}`];
 
     document.querySelector('#questionsToAnswer').style.display = 'none';
@@ -154,7 +187,9 @@ function runGame() {
     document.querySelector('.card-footer').style.display = 'block';
 
     orderNumberField.innerText = orderNumber;
-    answerNumberLetters = translatingNumbers(answerNumber);
+
+    translationRange(answerNumber);   
+
     answerField.innerText = `Вы загадали число ${answerNumberLetters}?`;
 
     document.getElementById('btnLess').addEventListener('click', function () {
@@ -164,7 +199,7 @@ function runGame() {
         orderNumber++;
         orderNumberField.innerText = orderNumber;
 
-        answerNumberLetters = translatingNumbers(answerNumber);
+        translationRange(answerNumber);   
 
         let messagesloss = [`Вы загадали неправильное число!\n\u{1F914}` , `Я сдаюсь..\n\u{1F92F}`, `Как ты обманул меня хитрый человек?!\n\u{1F914}`];
         let messagesQuestion = [`Вы загадали число ${answerNumberLetters}?` , `А может это ${answerNumberLetters}?`, `По моему число ${answerNumberLetters} загаданное?`];
@@ -172,6 +207,7 @@ function runGame() {
         if (maxValue < minValue){
             const randomIndex = Math.round(Math.random()*(messagesloss.length-1));
             answerField.innerText = messagesloss[randomIndex];
+            document.querySelector('#cardBody2').style.display = 'none';
         } else {
             const randomIndex = Math.round(Math.random()*(messagesQuestion.length-1));
             answerField.innerText = messagesQuestion[randomIndex];
@@ -185,15 +221,16 @@ function runGame() {
         answerNumber = (maxValue - Math.floor((maxValue - minValue) / 2)) ;
         orderNumber++;
         orderNumberField.innerText = orderNumber;
-
-        let answerNumberLetters = translatingNumbers(answerNumber);
-
+        
+        translationRange(answerNumber);   
+    
         let messagesloss = [`Вы загадали неправильное число!\n\u{1F914}` , `Я сдаюсь..\n\u{1F92F}`, `Как ты обманул меня хитрый человек?!\n\u{1F914}`];
         let messagesQuestion = [`Вы загадали число ${answerNumberLetters }?` , `А может это ${answerNumberLetters}?`, `По моему число ${answerNumberLetters} загаданное?`];
 
         if (answerNumber > maxValue){
             const randomIndex = Math.round(Math.random()*(messagesloss.length-1));
             answerField.innerText = messagesloss[randomIndex];
+            document.querySelector('#cardBody2').style.display = 'none';
         } else {
             const randomIndex = Math.round(Math.random()*(messagesQuestion.length-1));
             answerField.innerText = messagesQuestion[randomIndex];
@@ -206,6 +243,10 @@ function runGame() {
             const randomIndex = Math.round(Math.random()*(messagesVictory.length-1));
             answerField.innerText = messagesVictory[randomIndex];
         };
+        document.querySelector('#cardBody2').style.display = 'none';
+        answerNumber = 0;
+        maxValue = 0;
+        minValue = 0;
     });
 }
 
@@ -219,12 +260,12 @@ function alert(message, type) {
 function validateForm() {
     minValue = document.getElementById('minValue').value;
     maxValue = document.getElementById('maxValue').value;
-    if((minValue < maxValue)&&(minValue > 0)&&(maxValue <= 200)) {
+    if((minValue < maxValue)&&(minValue >= -999)&&(maxValue <= 999)) {
         questionsToAnswer();
     } else  {
         alert('Вы не ввели значения диапазона!!!!','danger');
-        minValue.value = 1;
-        maxValue = 200;
+        minValue.value = -999;
+        maxValue = 999;
     }
 }
 
@@ -242,3 +283,12 @@ function runToMinMaxValue() {
     document.querySelector('#greeting').style.display = 'none';
 }
 
+function translationRange() {
+    if (answerNumber == 0) {   
+        answerNumberLetters = 'ноль';
+    } else  if  ((answerNumber > -200)&&(answerNumber < 200)){
+        answerNumberLetters = translatingNumbers(answerNumber);
+    } else {
+        answerNumberLetters = answerNumber;
+    }
+}
