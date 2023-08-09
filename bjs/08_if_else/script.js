@@ -1,49 +1,3 @@
-/* let minValue = parseInt(prompt('Минимальное знание числа для игры','0'));
-let maxValue = parseInt(prompt('Максимальное знание числа для игры','100'));
-alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
-let answerNumber  = Math.floor((minValue + maxValue) / 2);
-let orderNumber = 1;
-let gameRun = true;
-
-const orderNumberField = document.getElementById('orderNumberField');
-const answerField = document.getElementById('answerField');
-
-orderNumberField.innerText = orderNumber;
-answerField.innerText = `Вы загадали число ${answerNumber }?`;
-
-document.getElementById('btnRetry').addEventListener('click', function () {
-    minValue = 0;
-    maxValue = 100;
-    orderNumber = 0;
-})
-
-document.getElementById('btnOver').addEventListener('click', function () {
-    if (gameRun){
-        if (minValue === maxValue){
-            const phraseRandom = Math.round( Math.random());
-            const answerPhrase = (phraseRandom === 1) ?
-                `Вы загадали неправильное число!\n\u{1F914}` :
-                `Я сдаюсь..\n\u{1F92F}`;
-
-            answerField.innerText = answerPhrase;
-            gameRun = false;
-        } else {
-            minValue = answerNumber  + 1;
-            answerNumber  = Math.floor((minValue + maxValue) / 2);
-            orderNumber++;
-            orderNumberField.innerText = orderNumber;
-            answerField.innerText = `Вы загадали число ${answerNumber }?`;
-        }
-    }
-})
-
-document.getElementById('btnEqual').addEventListener('click', function () {
-    if (gameRun){
-        answerField.innerText = `Я всегда угадываю\n\u{1F60E}`
-        gameRun = false;
-    }
-})
- */
 let minValue;
 let maxValue;
 let gameRun = true;
@@ -114,7 +68,6 @@ function translatingNumbers (value) {
     
     answerNumberReversed = Math.abs(answerNumber);
 
-    console.log(numReversed);
     if ((answerNumberReversed < 10)&&(answerNumberReversed > 0))  {
         for (i=0; i < thirdPlace.length; i++) {
             if (numReversed[0] == (i+1)) {
@@ -138,44 +91,45 @@ function translatingNumbers (value) {
                 returnValue1 = thirdPlace[i];
             }
         }
-    } else if ((answerNumberReversed > 110)&&(answerNumberReversed < 120)) {
-        for (i=0; i < firstPlace.length; i++) {
-            if (numReversed[0] == (i+1)) {
-                returnValue3 = firstPlace[i];
+    } else {
+        if (answerNumberReversed[1] == 1) {
+            for (i=0; i < firstPlace.length; i++) {
+                if (numReversed[0] == (i+1)) {
+                    returnValue3 = firstPlace[i];
+                }
             }
-        }
-        for (i=0; i < invalidNumber.length; i++) {
-            if (numReversed[2] == (i+1)) {
-                returnValue1 = invalidNumber[i];
+            for (i=0; i < invalidNumber.length; i++) {
+                if (numReversed[2] == (i+1)) {
+                    returnValue1 = invalidNumber[i];
+                }
             }
-        }
-    } else if ((answerNumberReversed >= 100)&&(answerNumberReversed <= 200)) {
-        for (i=0; i < firstPlace.length; i++) {
-            if (numReversed[0] == (i+1)) {
-                returnValue3 = firstPlace[i];
+        } else {
+            for (i=0; i < firstPlace.length; i++) {
+                if (numReversed[0] == (i+1)) {
+                    returnValue3 = firstPlace[i];
+                }
             }
-        }
-        for (i=0; i < secondPlace.length; i++) {
-            if (numReversed[1] == (i+1)) {
-                returnValue2 = secondPlace[i];
+            for (i=0; i < secondPlace.length; i++) {
+                if (numReversed[1] == (i+1)) {
+                    returnValue2 = secondPlace[i];
+                }
             }
-        }
-        for (i=0; i < thirdPlace.length; i++) {
-            if (numReversed[2] == (i+1)) {
-                returnValue1 = thirdPlace[i];
+            for (i=0; i < thirdPlace.length; i++) {
+                if (numReversed[2] == (i+1)) {
+                    returnValue1 = thirdPlace[i];
+                }
             }
         }
     }
     
     returnValue = `${minus} ${returnValue3} ${returnValue2} ${returnValue1}`;
-    console.log(returnValue);
     return returnValue;
 }
 
 function runGame() {
 
     answerNumber  = Math.floor((maxValue - Math.abs(minValue)) / 2);
-    console.log(answerNumber);
+
     let messagesVictory = [`Я всегда угадываю\n\u{1F60E}` , `У меня просто кибермозг\n\u{1F92F}`, `Машины рулят!!!\n\u{1F914}`];
 
     document.querySelector('#questionsToAnswer').style.display = 'none';
@@ -212,7 +166,6 @@ function runGame() {
             const randomIndex = Math.round(Math.random()*(messagesQuestion.length-1));
             answerField.innerText = messagesQuestion[randomIndex];
         }
-        console.log(answerNumber, minValue, maxValue);
     });
 
     document.getElementById('btnOver').addEventListener('click', function () {
@@ -235,7 +188,6 @@ function runGame() {
             const randomIndex = Math.round(Math.random()*(messagesQuestion.length-1));
             answerField.innerText = messagesQuestion[randomIndex];
         }
-        console.log(answerNumber, minValue, maxValue);
     });
 
     document.getElementById('btnEqual').addEventListener('click', function () {
@@ -254,19 +206,31 @@ function alert(message, type) {
   var wrapper = document.createElement('div')
   wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
 
-  alertPlaceholder.append(wrapper)
+  alertPlaceholder.append(wrapper);
+}
+
+function protectForm() {
+    document.getElementById('minValue').value = -999;
+    document.getElementById('maxValue').value = 999;
+    alert('Вы не ввели значения диапазона!!!!','danger');
 }
 
 function validateForm() {
     minValue = document.getElementById('minValue').value;
     maxValue = document.getElementById('maxValue').value;
-    if((minValue < maxValue)&&(minValue >= -999)&&(maxValue <= 999)) {
-        questionsToAnswer();
-    } else  {
+    let protect = true;
+
+    (minValue < -999) ? protectForm() : 
+    (maxValue > 999) ? protectForm() : 
+    (minValue > maxValue) ? protectForm() : questionsToAnswer();
+    
+/*     if((minValue > maxValue)||(minValue >= -999)||(maxValue <= 999)) {    
         alert('Вы не ввели значения диапазона!!!!','danger');
-        minValue.value = -999;
-        maxValue = 999;
-    }
+        document.getElementById('minValue').value = -999;
+        document.getElementById('maxValue').value = 999;
+    } else {
+        questionsToAnswer();
+    } */
 }
 
 function questionsToAnswer() {
@@ -283,12 +247,10 @@ function runToMinMaxValue() {
     document.querySelector('#greeting').style.display = 'none';
 }
 
-function translationRange() {
+function translationRange() {    
     if (answerNumber == 0) {   
         answerNumberLetters = 'ноль';
-    } else  if  ((answerNumber > -200)&&(answerNumber < 200)){
+    } else  {
         answerNumberLetters = translatingNumbers(answerNumber);
-    } else {
-        answerNumberLetters = answerNumber;
     }
 }
