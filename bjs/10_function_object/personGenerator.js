@@ -74,7 +74,7 @@ const personGenerator = {
             "id_12": "декабря"
         }     
     }`,
-    patronymicJson: `{
+/*     patronymicJson: `{
         "count": 11,
         "list": {
             "id_1": "Иванов",
@@ -89,7 +89,7 @@ const personGenerator = {
             "id_10": "Олегов",
             "id_11": "Семёнов"
         }
-    }`,
+    }`, */
     workMaleJson: `{
         "count": 6,
         "list": {
@@ -126,7 +126,31 @@ const personGenerator = {
     },
 
     randomPatronymic: function() {
-        return this.randomValue(this.patronymicJson);
+        let petromic = this.randomValue(this.firstNameMaleJson);
+        if (petromic.substr(-1) === 'й') {
+            petromic = petromic.slice(0, -1);
+            petromic = petromic + 'евич';
+        } else if (petromic.substr(-1) === 'а') {
+            petromic = petromic.slice(0, -1);
+            petromic = petromic + 'ич';
+        } else {
+            petromic = petromic + 'ович';
+        }
+        return petromic;
+    },
+
+    randomPatronymicFemale: function() {
+        let petromic = this.randomValue(this.firstNameMaleJson);
+        if (petromic.substr(-1) === 'й') {
+            petromic = petromic.slice(0, -1);
+            petromic = petromic + 'евна';
+        } else if (petromic.substr(-1) === 'а') {
+            petromic = petromic.slice(0, -1);
+            petromic = petromic + 'ична';
+        } else {
+            petromic = petromic + 'овна';
+        }
+        return petromic;
     },
 
     randomFirstName: function() {
@@ -169,12 +193,12 @@ const personGenerator = {
         if (gender === "Мужчина") {
             this.person.firstName = this.randomFirstName();
             this.person.surname = this.randomSurname();
-            this.person.patronymic = this.randomPatronymic() + "ич";
+            this.person.patronymic = this.randomPatronymic();
             this.person.work = this.randomWork(true);
         } else {
             this.person.firstName = this.randomFirstNameFemale();
             this.person.surname = this.randomSurname() + "a";
-            this.person.patronymic = this.randomPatronymic() + "на";
+            this.person.patronymic = this.randomPatronymicFemale();
             this.person.work = this.randomWork(false);
         }
         this.person.gender = gender;
