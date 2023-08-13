@@ -1,0 +1,22 @@
+body{
+    background: #2a2b32;
+}
+
+.card-body {
+    background: #222;
+    color: aliceblue;
+}
+
+.btn {
+    margin-top: 10px;
+    background: rgb(65, 105, 225);
+}
+
+.card-header {
+    background: rgb(65, 105, 225);
+    color: aliceblue;
+}
+
+#text-decor {
+    text-decoration: underline;
+}
